@@ -9,7 +9,7 @@ function M.setup(options)
 end
 
 function M.toggle()
-	config.options.hidden = not config.options.hidden
+	internal._hidden = not internal._hidden
 	vim.cmd("normal! zx") -- Update folds
 end
 

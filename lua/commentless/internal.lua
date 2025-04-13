@@ -1,37 +1,47 @@
 local M = {}
 
+-- HACK: Initial value is discarded at the beginning because the fold state isn't updated yet.
+-- So after a call to the `toggle` it folds the comments. Consider refactoring this
+-- to ensure `_hidden` is initialized properly before toggling.
+M._hidden = true
+M._inherited = {}
+
 local utils = require("commentless.utils")
 local config = require("commentless.config")
 
-function M.foldexpr(lnum)
-	if config.options.hidden then
-		if utils.is_comment(lnum) then
-			if utils.is_comment(lnum - 1) then
-				-- TODO: Docs say returning `=` is slow.
-				-- See if there are any alternative implementations.
-				return "="
-			end
-			return ">1"
-		end
-		return vim.fn.eval(M.inherited_foldexpr)
+function M.foldexpr()
+	-- Keep doing the inherited operations for non-comment lines
+	if not utils.is_comment(vim.v.lnum) then
+		return vim.fn.eval(M._inherited.foldexpr)
 	end
+
+	return M._hidden and "0" or "1"
 end
 
 function M.foldtext()
+	-- Keep doing the inherited operations for non-comment lines
+	if not utils.is_comment(vim.v.foldstart) then
+		return vim.fn.eval(M._inherited.foldtext)
+	end
+
 	local indention = string.rep(" ", vim.fn.indent(vim.v.foldstart))
 	local numOfLines = vim.v.foldend - vim.v.foldstart + 1
-	return indention .. "(" .. numOfLines .. " comments)"
+	return indention .. config.options.foldtext(numOfLines)
 end
 
 function M.setup()
 	-- Save the current `foldexpr` before overwriting it
-	M.inherited_foldexpr = vim.opt.foldexpr
+	M._inherited.foldexpr = vim.opt.foldexpr
+	M._inherited.foldtext = vim.opt.foldtext
 
 	-- Overwrite the global fold options
 	local opt = vim.opt
+	local req_int = "v:lua.require'commentless.internal'"
 	opt.foldmethod = "expr"
-	opt.foldexpr = "v:lua.require'commentless.internal'.foldexpr(v:lnum)"
-	opt.foldtext = "v:lua.require'commentless.internal'.foldtext()"
+	opt.foldexpr = req_int .. ".foldexpr()"
+	opt.foldtext = req_int .. ".foldtext()"
+
+	-- TODO: Is it possible to inherite `fillchars` as well for non-comment folding behavior?
 	opt.fillchars = "fold: " -- Remove the trailing dots
 end
 
