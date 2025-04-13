@@ -3,7 +3,6 @@ local M = {}
 local utils = require("commentless.utils")
 local config = require("commentless.config")
 
--- TODO: Add mutliline comment folding
 function M.foldexpr(lnum)
 	if config.options.hidden then
 		if utils.is_comment(lnum) then
