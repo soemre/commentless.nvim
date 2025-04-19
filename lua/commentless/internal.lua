@@ -6,15 +6,28 @@ local M = {}
 M._hidden = true
 M._inherited = {}
 
+M._is_last_line_hidden = false
+
 local utils = require("commentless.utils")
 local config = require("commentless.config")
 
 function M.foldexpr()
+	if vim.v.lnum == 1 then
+		M._is_last_line_hidden = false
+	end
+
+	if M._is_last_line_hidden and utils.is_blank_line(vim.v.lnum) then
+		-- No need to assign `true` to `_is_last_line_hidden` here since it is already `true`
+		return M._hidden and "0" or "1"
+	end
+
 	-- Keep doing the inherited operations for non-comment lines
 	if not utils.is_comment(vim.v.lnum) then
+		M._is_last_line_hidden = false
 		return vim.fn.eval(M._inherited.foldexpr)
 	end
 
+	M._is_last_line_hidden = true
 	return M._hidden and "0" or "1"
 end
 

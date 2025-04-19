@@ -10,4 +10,9 @@ function M.is_comment(lnum)
 	return node:type():match("comment")
 end
 
+function M.is_blank_line(lnum)
+	local line = vim.fn.getline(lnum)
+	return (line:match("^%s*$") == "")
+end
+
 return M
