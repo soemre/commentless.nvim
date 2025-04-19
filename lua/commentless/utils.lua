@@ -2,6 +2,8 @@ local config = require("commentless.config")
 
 local M = {}
 
+M._namespace_id = nil
+
 function M.is_comment(lnum)
 	local indention = vim.fn.indent(lnum)
 

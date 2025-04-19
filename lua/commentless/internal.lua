@@ -1,36 +1,31 @@
 local utils = require("commentless.utils")
--- local config = require("commentless.config")
+local config = require("commentless.config")
 
 local M = {}
 
--- HACK: Initial value is discarded at the beginning because the fold state isn't updated yet.
--- So after a call to the `toggle` it folds the comments. Consider refactoring this
--- to ensure `_hidden` is initialized properly before toggling.
-M._hidden = true
+M._hidden = false
 M._inherited = {}
-
 M._current_comment_block_index = -1
 M._is_last_line_hidden = false
 
 function M.foldexpr()
 	if vim.v.lnum == 1 then
 		M._is_last_line_hidden = false
+
+		if config.options.hide_single_comments and not M._hidden then
+			utils.show_lines()
+		end
 	end
 
-	if M._is_last_line_hidden and utils.is_blank_line(vim.v.lnum) then
+	if config.options.hide_following_blank_lines and M._is_last_line_hidden and utils.is_blank_line(vim.v.lnum) then
 		-- No need to assign `true` to `_is_last_line_hidden` here since it is already `true`
-		return M._hidden and "0" or "1"
+		return M._hidden and "1" or "0"
 	end
 
 	-- Keep doing the inherited operations for non-comment lines
 	if not utils.is_comment(vim.v.lnum) then
-		if not M._hidden then
-			if M._current_comment_block_index == vim.v.lnum - 1 then
-				utils.hide_line(M._current_comment_block_index)
-				-- M._current_comment_block_index = -1
-			end
-		else
-			utils.show_lines()
+		if config.options.hide_single_comments and M._hidden and M._current_comment_block_index == vim.v.lnum - 1 then
+			utils.hide_line(M._current_comment_block_index)
 		end
 
 		M._is_last_line_hidden = false
@@ -41,7 +36,7 @@ function M.foldexpr()
 		M._current_comment_block_index = vim.v.lnum
 		M._is_last_line_hidden = true
 	end
-	return M._hidden and "0" or "1"
+	return M._hidden and "1" or "0"
 end
 
 function M.foldtext()

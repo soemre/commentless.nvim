@@ -1,8 +1,8 @@
-local M = {}
-
 local config = require("commentless.config")
 local internal = require("commentless.internal")
 local utils = require("commentless.utils")
+
+local M = {}
 
 function M.setup(options)
 	config.setup(options)

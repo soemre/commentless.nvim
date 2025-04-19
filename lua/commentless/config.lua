@@ -8,6 +8,8 @@ end
 
 function M.defaults()
 	local defaults = {
+		hide_single_comments = true,
+		hide_following_blank_lines = true,
 		foldtext = function(folded_count)
 			return "(" .. folded_count .. " comments)"
 		end,
