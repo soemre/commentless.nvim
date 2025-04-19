@@ -1,3 +1,6 @@
+local utils = require("commentless.utils")
+-- local config = require("commentless.config")
+
 local M = {}
 
 -- HACK: Initial value is discarded at the beginning because the fold state isn't updated yet.
@@ -6,10 +9,8 @@ local M = {}
 M._hidden = true
 M._inherited = {}
 
+M._current_comment_block_index = -1
 M._is_last_line_hidden = false
-
-local utils = require("commentless.utils")
-local config = require("commentless.config")
 
 function M.foldexpr()
 	if vim.v.lnum == 1 then
@@ -23,11 +24,23 @@ function M.foldexpr()
 
 	-- Keep doing the inherited operations for non-comment lines
 	if not utils.is_comment(vim.v.lnum) then
+		if not M._hidden then
+			if M._current_comment_block_index == vim.v.lnum - 1 then
+				utils.hide_line(M._current_comment_block_index)
+				-- M._current_comment_block_index = -1
+			end
+		else
+			utils.show_lines()
+		end
+
 		M._is_last_line_hidden = false
 		return vim.fn.eval(M._inherited.foldexpr)
 	end
 
-	M._is_last_line_hidden = true
+	if not M._is_last_line_hidden then
+		M._current_comment_block_index = vim.v.lnum
+		M._is_last_line_hidden = true
+	end
 	return M._hidden and "0" or "1"
 end
 
@@ -37,18 +50,18 @@ function M.foldtext()
 		return vim.fn.eval(M._inherited.foldtext)
 	end
 
-	local indention = string.rep(" ", vim.fn.indent(vim.v.foldstart))
-	local numOfLines = vim.v.foldend - vim.v.foldstart + 1
-	return indention .. config.options.foldtext(numOfLines)
+	local folded_count = vim.v.foldend - vim.v.foldstart + 1
+	return utils.foldtext(vim.v.foldstart, folded_count, false)
 end
 
 function M.setup()
+	local opt = vim.opt
+
 	-- Save the current `foldexpr` before overwriting it
-	M._inherited.foldexpr = vim.opt.foldexpr
-	M._inherited.foldtext = vim.opt.foldtext
+	M._inherited.foldexpr = opt.foldexpr
+	M._inherited.foldtext = opt.foldtext
 
 	-- Overwrite the global fold options
-	local opt = vim.opt
 	local req_int = "v:lua.require'commentless.internal'"
 	opt.foldmethod = "expr"
 	opt.foldexpr = req_int .. ".foldexpr()"
