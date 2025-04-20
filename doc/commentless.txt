@@ -1,0 +1,60 @@
+================================================================================
+INTRODUCTION                                   *commentless* *commentless.nvim
+
+This plugin lets you fold comments to better visualize your code’s logic,
+and unfold them whenever needed.
+
+================================================================================
+GETTING STARTED                                  *commentless.getting-started*
+
+Before using |commentless.nvim|, make sure that
+`nvim-treesitter/nvim-treesitter` is set up. Then call |commentless.setup()|
+to configure and initialize.
+
+After that, comments can be hidden/revealed by calling |commentless.toggle()|.
+
+And below, you can find some Vim settings to change the global folding
+behavior.
+
+>lua
+vim.opt.foldminlines = 0 -- Allow folding/hiding single lines
+vim.opt.fillchars = "fold: " -- Remove the trailing dots
+<
+
+                                                         *commentless.setup()*
+
+commentless.setup({opts})
+    Configure and initialize |commentless.nvim|.
+
+    Parameters:
+        {opts}: Options to manage the plugin's behavior. Every non-provided
+        option defaults to its set behavior in the |default-options| table.
+            {hide_following_blank_lines} `nil|boolean`
+                When it's set to true, considers blank lines as part of
+                comment blocks so comment blocks span from the first comment
+                line after a code line to the next code line.
+            {foldtext} `nil|function`
+                The value it returns sets the text displayed for the
+                folded/hidden comment blocks.
+
+                                           *commentless.setup-default-options*
+>lua
+{
+    hide_following_blank_lines = true,
+
+    foldtext = function(folded_count)
+        return "(" .. folded_count .. " comments)"
+    end,
+}
+<
+
+================================================================================
+API                                                          *commentless.api*
+
+                                                        *commentless.toggle()*
+commentless.toggle()
+    Hide/Reveal comments by folding/unfolding.
+
+
+
+vim:tw=80:ts=2:ft=help:norl:syntax=help:

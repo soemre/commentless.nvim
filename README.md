@@ -39,6 +39,8 @@ The `setup` call is handled internally by `lazy.nvim`.
 
 ## 🛠️ Configuration
 
+Check `:help commentless` for full documentation.
+
 ### Default Configuration
 
 ```lua
@@ -53,6 +55,6 @@ The `setup` call is handled internally by `lazy.nvim`.
 ### Some Recommendations for Global Folding Behavior
 
 ```lua
-vim.opt.foldminlines = 0 -- Allow folding/hidding single lines
+vim.opt.foldminlines = 0 -- Allow folding/hiding single lines
 vim.opt.fillchars = "fold: " -- Remove the trailing dots
 ```
