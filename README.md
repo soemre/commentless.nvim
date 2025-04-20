@@ -1,9 +1,13 @@
-# commentless.nvim
+# 🧘 commentless.nvim
 
-Hide comments, focus on the code flow, and reveal them if needed 🧘
+Hide comments, focus on the code flow, and reveal them if needed.
 
 This plugin lets you fold comments to better visualize your code’s logic,
 and unfold them whenever needed.
+
+<div align="center">
+  <img src="https://i.imgur.com/32JkGlQ.gif" alt="commentless.nvim usage" width="90%">
+</div>
 
 ## 📦 Installation
 
