@@ -14,4 +14,8 @@ function M.is_blank_line(lnum)
 	return (line:match("^%s*$") == "")
 end
 
+function M.reload()
+	vim.cmd("normal! zx") -- Update folds
+end
+
 return M

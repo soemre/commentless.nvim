@@ -23,7 +23,21 @@ end
 
 function M.toggle()
 	M._hidden = not M._hidden
-	vim.cmd("normal! zx") -- Update folds
+	utils.reload()
+end
+
+function M.hide()
+	M._hidden = true
+	utils.reload()
+end
+
+function M.reveal()
+	M._hidden = false
+	utils.reload()
+end
+
+function M.is_hidden()
+	return M._hidden
 end
 
 function M.foldexpr()

@@ -55,6 +55,17 @@ API                                                          *commentless.api*
 commentless.toggle()
     Hide/Reveal comments by folding/unfolding.
 
+                                                          *commentless.hide()*
+commentless.hide()
+    Hide comments by folding.
+
+                                                        *commentless.reveal()*
+commentless.reveal()
+    Reveal comments by unfolding.
+
+                                                     *commentless.is_hidden()*
+commentless.is_hidden()
+    Returns `true` if comments are hidden.
 
 
 vim:tw=80:ts=2:ft=help:norl:syntax=help:
