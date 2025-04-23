@@ -62,3 +62,12 @@ Check `:help commentless` for full documentation.
 vim.opt.foldminlines = 0 -- Allow folding/hiding single lines
 vim.opt.fillchars = "fold: " -- Remove the trailing dots
 ```
+
+## ⓘ FAQ
+
+### Why isn't it working with some file types?
+
+To determine whether something is a comment, it uses `tree-sitter`. Therefore,
+you need to have `tree-sitter` parsers installed for the file types (languages)
+you plan to use. You can install them using `:TSInstall <language_to_install>`
+or via the `ensure_installed` option in `tree-sitter`'s setup parameters.

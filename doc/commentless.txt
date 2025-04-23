@@ -33,6 +33,9 @@ commentless.setup({opts})
                 When it's set to true, considers blank lines as part of
                 comment blocks so comment blocks span from the first comment
                 line after a code line to the next code line.
+            {hide_current_comment} `nil|boolean`
+                When set to true, it hides the comment your cursor is
+                currently on.
             {foldtext} `nil|function`
                 The value it returns sets the text displayed for the
                 folded/hidden comment blocks.
@@ -41,6 +44,8 @@ commentless.setup({opts})
 >lua
 {
     hide_following_blank_lines = true,
+
+		hide_current_comment = true,
 
     foldtext = function(folded_count)
         return "(" .. folded_count .. " comments)"

@@ -1,3 +1,5 @@
+local config = require("commentless.config")
+
 local M = {}
 
 function M.is_comment(lnum)
@@ -15,7 +17,11 @@ function M.is_blank_line(lnum)
 end
 
 function M.reload()
-	vim.cmd("normal! zx") -- Update folds
+	if config.options.hide_current_comment then
+		vim.cmd("normal! zX") -- Update folds
+	else
+		vim.cmd("normal! zx") -- Update folds
+	end
 end
 
 return M
