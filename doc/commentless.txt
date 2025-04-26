@@ -26,7 +26,7 @@ vim.opt.fillchars = "fold: " -- Remove the trailing dots
 commentless.setup({opts})
     Configure and initialize |commentless.nvim|.
 
-    Parameters:
+    Parameters: ~
         {opts}: Options to manage the plugin's behavior. Every non-provided
         option defaults to its set behavior in the |default-options| table.
             {hide_following_blank_lines} `nil|boolean`
@@ -71,6 +71,19 @@ commentless.reveal()
                                                      *commentless.is_hidden()*
 commentless.is_hidden()
     Returns `true` if comments are hidden.
+
+
+================================================================================
+COMMANDS                                                *commentless.commands*
+
+                                                                *:Commentless*
+Some API commands are available under `:Commentless <args>`.
+If no argument is provided, it defaults to `toggle`.
+
+Available `<args>`: ~
+- `toggle`
+- `hide`
+- `reveal`
 
 
 vim:tw=80:ts=2:ft=help:norl:syntax=help:

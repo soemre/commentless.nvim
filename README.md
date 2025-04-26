@@ -2,7 +2,7 @@
 
 Hide comments, focus on the code flow, and reveal them if needed.
 
-This plugin lets you fold comments to better visualize your code’s logic,
+This plugin lets you fold all comments to better visualize your code’s logic,
 and unfold them whenever needed.
 
 <div align="center">
@@ -23,6 +23,7 @@ The `setup` call is handled internally by `lazy.nvim`.
 ```lua
 {
     "soemre/commentless.nvim",
+    cmd = "Commentless",
     keys = {
         {
             "<leader>/",
@@ -39,6 +40,18 @@ The `setup` call is handled internally by `lazy.nvim`.
         -- Customize Configuration
     },
 }
+```
+
+## 🚀 Usage
+
+To get started, bind keys to the public API or run `:Commentless <args>` directly.
+
+### Example
+
+```lua
+vim.keymap.set("n", "<leader>/", function()
+    require("commentless").toggle()
+end)
 ```
 
 ## 🛠️ Configuration
